@@ -1,0 +1,51 @@
+=============================================================
+CEC'2013 Single Global Optimization Special Session Benchmark
+=============================================================
+
+This package wraps the official C code for the Special Session & Competition on Real-Parameter Single Objective Optimization at
+the IEEE Congress on Evolutionary Computation. See http://www.ntu.edu.sg/home/EPNSugan/index_files/CEC2013/CEC2013.htm.
+
+This package is a unofficial package using cython for calling the official implementation in C source code.
+Requirements
+------------
+- GNU Make
+- GNU G++
+- Python
+- Cython
+
+Testing Environment
+-------------------
+- Debian GNU/Linux jessie/sid
+- GNU Make 3.81
+- g++ (Debian 4.7.3-4) 4.7.3
+- Python 2.7 and Python 3.2
+- numpy 1.8.1
+- cython 0.20.1
+
+Results with Travis-CI
+~~~~~~~~~~~~~~~~~~~~~~
+.. image:: https://api.travis-ci.org/dmolina/cec2013lsgo.svg?branch=master
+
+Instalation
+-----------
+- python setup.py build_ext --inplace
+- python setup.py sdist
+- sudo pip install dist/cec2013single-0.1.tar.gz
+- put the path of the repository inside the manage repositories (pycharm)
+
+To compile the source code in C++
+----------------------------------
+
+The source code in C++ is also available. If you want to compile only the C++
+version type in 'make' in the root directory of source code. 
+
+There are two equivalents demo executables: demo and demo2. 
+
+**REMEMBER: To run the C++ version the directory cdatafiles must be available in the working directory**. 
+In the python version, these files are included in the packages, so it is not needed. 
+
+Tests
+-----
+
+The source code has tests to check the information about each function, and the results obtained
+with the C version using the solution np.zeros(1000) (a solution of zeros).
