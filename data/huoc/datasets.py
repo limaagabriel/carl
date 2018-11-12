@@ -31,7 +31,6 @@ class ScaledCognitivePlusGenderDataset(CognitivePlusGenderDataset):
 class StdScaledCognitivePlusGenderDataset(CognitivePlusGenderDataset):
 	scaler = StandardScaler
 
-
 class SocialInfoDataset(HuocDataset):
 	features = [0, 1, 2, -1]
 
