@@ -237,7 +237,8 @@ class Researcher(object):
 	@log_to_csv('results')
 	def find_errors(self, algorithm, k, classifier):
 		resume = []
-		file_id = '{}_{}'.format(algorithm.__name__, k)
+		classifier_name = classifier.__class__.__name__
+		file_id = '{}_{}_{}'.format(classifier_name, algorithm.__name__, k)
 		labels = self.source.labels + ['Unsupervised', 'Supervised']
 		_, _, errors = self.__confusion_labels_kernel(algorithm, k)
 
