@@ -1,26 +1,30 @@
 from experiments.researcher import Researcher
-from data.huoc.datasets import HuocDataset
-from data.huoc.datasets import CognitiveTestsDataset
-from data.huoc.datasets import SocialInfoDataset
-from data.huoc.datasets import SocialAndTestsDataset
-from data.huoc.datasets import GeneticMarkersDataset
-from data.huoc.datasets import GeneticAndSocialDataset
-
-from clustering.swarm.pso.PSOC import PSOC
-from clustering.swarm.pso.PSOCKM import PSOCKM
-from clustering.swarm.pso.KMPSOC import KMPSOC
-from clustering.traditional.KMeans import KMeans
+from data.huoc.datasets import HuocCollection
 from clustering.traditional.FCMeans import FCMeans
+from sklearn.neural_network import MLPClassifier
 
 min_k = 3
 max_k = 15
 k_range = range(min_k, max_k + 1)
-sources = [HuocDataset, CognitiveTestsDataset, SocialInfoDataset, SocialAndTestsDataset, GeneticMarkersDataset, GeneticAndSocialDataset]
+sources = HuocCollection().all_sets()
 algorithms = [FCMeans]
 
 for source in sources:
-	researcher = Researcher(source())
+	s = source()
+	hidden_layers = (s.feature_shape[1] * 2 + 1,)
+	classifier = MLPClassifier(learning_rate='constant',
+							   learning_rate_init=0.1,
+							   activation='logistic',
+							   early_stopping=True,
+							   hidden_layer_sizes=hidden_layers)
+
+	ax, ay, _, _ = s.split(0.7)
+
+	classifier.fit(ax, ay)
+
+	researcher = Researcher(s)
 	researcher.find_errors(k_range=k_range,
-					  	   algorithms=algorithms)
+					  	   algorithms=algorithms,
+					  	   classifier=classifier)
 
 

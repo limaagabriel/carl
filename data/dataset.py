@@ -1,5 +1,6 @@
 import requests
 import numpy as np
+import pandas as pd
 
 class Collection(object):
 	def all_sets(self):
@@ -28,7 +29,18 @@ class Dataset(object):
 		print('Loaded {}'.format(self.__class__.__name__))
 		self.dataset = self.__process_features(method(path, delimiter))
 		self.unlabeled_data = self.__remove_classes(self.dataset)
+		self.feature_shape = self.unlabeled_data.shape
 		self.classes = self.__classes()
+
+	def split(self, proportion):
+		dataframe = pd.DataFrame(data=self.dataset)
+		training = dataframe.sample(frac=proportion)
+		test = dataframe[~dataframe.index.isin(training.index)]
+
+		training = training.values
+		test = test.values
+
+		return training[:,0:-1], training[:,-1], test[:,0:-1], test[:,-1]
 
 	def __process_features(self, dataset):
 		pipeline = [self.__select_features,

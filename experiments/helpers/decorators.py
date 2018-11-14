@@ -2,6 +2,7 @@ import os
 import shutil
 import itertools
 import numpy as np
+import pandas as pd
 from tqdm import tqdm
 from functools import wraps
 from mpl_toolkits.mplot3d import Axes3D
@@ -9,6 +10,21 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+
+def log_to_csv(base):
+	def logger(fn):
+		@wraps(fn)
+		def wrapper(self, *args, **kwargs):
+			fn_name = fn.__name__
+			source_name = self.source.__class__.__name__
+			root = os.path.join(base, source_name, fn_name)
+			file_id, labels, data = fn(self, *args, **kwargs)
+
+			dataframe = pd.DataFrame(data=data, columns=labels)
+			dataframe.to_csv(os.path.join(root, '{}.csv'.format(file_id)), index=False)
+
+		return wrapper
+	return logger
 
 def iterate(*args):
 	def mapper(fn):
@@ -39,7 +55,7 @@ def bargraph(base):
 			file.write(','.join(map(lambda x: str(x), std)))
 
 
-	def plot_bargraph(path, labels, plot_id, x, y, std):
+	def plot_bargraph(path, plot_id, labels, x, y, std):
 		path = os.path.join(path, plot_id)
 
 		plt.bar(x, height=y, yerr=std)
@@ -57,7 +73,7 @@ def bargraph(base):
 			fn_name = fn.__name__
 			source_name = self.source.__class__.__name__
 			path = os.path.join(base, source_name, fn_name)
-			plot_bargraph(path, self.source.labels, *fn(self, *args, **kwargs))
+			plot_bargraph(path, *fn(self, *args, **kwargs))
 
 		return wrapper
 	return bargrapher
