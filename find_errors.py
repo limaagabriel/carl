@@ -17,7 +17,6 @@ for source in sources:
 
 	classifier.fit(ax, ay)
 	print(classifier.score(bx, by))
-	break
 
 	researcher = Researcher(s)
 	researcher.find_errors(k_range=k_range,
