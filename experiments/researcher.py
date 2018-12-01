@@ -4,18 +4,9 @@ from sklearn.manifold import TSNE
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
-
-from experiments.helpers.decorators import clean
-from experiments.helpers.decorators import iterate
-from experiments.helpers.decorators import errorbar
-from experiments.helpers.decorators import bargraph
-from experiments.helpers.decorators import log_to_csv
-from experiments.helpers.decorators import scatter_plot
-from experiments.helpers.decorators import confusion_matrix
-from experiments.helpers.decorators import prepare_directory
-from experiments.helpers.decorators import save_results_with_statistical_data
-
 from clustering.evaluation.Metrics import Metrics
+from experiments.helpers.decorators import *
+
 
 class Researcher(object):
 	def __init__(self, source):
@@ -231,7 +222,6 @@ class Researcher(object):
 	# 	clusters = map(lambda x: np.array(x), clusters)
 	# 	self.custom_scatter(clusters, k, algorithm)
 
-	@clean('results')
 	@prepare_directory('results')
 	@iterate('algorithms', 'k_range')
 	@log_to_csv('results')
