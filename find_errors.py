@@ -13,10 +13,11 @@ algorithms = [FCMeans]
 for source in sources:
 	s = source()
 	hidden_layers = (s.feature_shape[1] * 2 + 1,)
-	classifier = MLPClassifier(learning_rate='constant',
+	classifier = MLPClassifier(learning_rate='adaptive',
 							   learning_rate_init=0.1,
 							   activation='logistic',
 							   early_stopping=True,
+							   batch_size=16,
 							   hidden_layer_sizes=hidden_layers)
 
 	ax, ay, bx, by = s.split(0.7)
