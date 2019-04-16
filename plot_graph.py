@@ -4,6 +4,9 @@ from data.huoc.datasets import *
 import numpy as np
 import itertools
 from tqdm import tqdm
+
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 min_k = 3
