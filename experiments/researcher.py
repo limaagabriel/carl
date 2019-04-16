@@ -14,7 +14,7 @@ class Researcher(object):
 		self.classes = source.classes
 		self.full_dataset = source.dataset
 		self.dataset = source.unlabeled_data
-		
+
 	def __unsupervised_confusion_matrix(self, clusters):
 		matrix = {
 			str(int(a)) : {
@@ -79,7 +79,11 @@ class Researcher(object):
 
 	def __confusion_labels_kernel(self, algorithm, k):
 		instance = algorithm(n_clusters=k)
-		instance.fit(self.dataset)
+
+		d = self.dataset.copy()
+		np.random.shuffle(d)
+		train_size = int(d.shape[0] * 0.7)
+		instance.fit(d[:train_size,:])
 
 		clusters = [[] for _ in range(k)]
 		for data in self.full_dataset:

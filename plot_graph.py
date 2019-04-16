@@ -10,18 +10,12 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 min_k = 3
-max_k = 30
+max_k = 20
 sample_size = 30
 sample_range = range(sample_size)
 sources = [HuocDataset, CognitiveTestsDataset, SocialInfoDataset, SocialAndTestsDataset, GeneticMarkersDataset]
 k_range = range(min_k, max_k + 1)
 algorithms = [FCMeans]
-
-class_names = {
-	'1': 'Dementia',
-	'10': 'MCI',
-	'100': 'Control'
-}
 
 total = len(algorithms) * len(k_range)
 labels = list(map(lambda x: x.name,sources))
@@ -36,6 +30,7 @@ for source_index, source in enumerate(sources):
 			a = float(len(right))
 			b = float(len(wrong))
 			accuracy[iteration, k - min_k] = a / (a + b)
+			print(accuracy[iteration, k - min_k])
 
 	plt.errorbar(k_range, accuracy.mean(axis=0), accuracy.std(axis=0))
 
