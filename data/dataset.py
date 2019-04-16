@@ -53,7 +53,7 @@ class Dataset(object):
 
 	def __select_features(self, dataset):
 		try:
-			self.labels = map(self.labels.__getitem__, self.features)
+			self.labels = list(map(self.labels.__getitem__, self.features))
 			return dataset[:, self.features]		
 		except AttributeError:
 			return dataset
@@ -91,7 +91,7 @@ class Dataset(object):
 		lines = text.splitlines()
 		to_float = lambda y: float(y)
 		tokenizer = lambda x: map(to_float, x.split(delimiter))
-		entities = map(tokenizer, lines)
+		entities = list(map(tokenizer, lines))
 		return np.array(entities)
 
 

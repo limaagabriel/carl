@@ -14,7 +14,7 @@ class Researcher(object):
 		self.classes = source.classes
 		self.full_dataset = source.dataset
 		self.dataset = source.unlabeled_data
-
+		
 	def __unsupervised_confusion_matrix(self, clusters):
 		matrix = {
 			str(int(a)) : {
@@ -39,7 +39,7 @@ class Researcher(object):
 				matrix[current_class][most_frequent_class] += 1
 
 				if current_class == most_frequent_class:
-					right.append(data)
+					right.append((data, most_frequent_class))
 				else:
 					wrong.append((data, most_frequent_class))
 		
@@ -74,6 +74,9 @@ class Researcher(object):
 		self.visualize_pca(self.dataset, assignments, k, algorithm, 2)
 		self.visualize_pca(self.dataset, assignments, k, algorithm, 3)
 
+	def confusion_labels_kernel(self, algorithm, k):
+		return self.__confusion_labels_kernel(algorithm, k)
+
 	def __confusion_labels_kernel(self, algorithm, k):
 		instance = algorithm(n_clusters=k)
 		instance.fit(self.dataset)
@@ -85,7 +88,7 @@ class Researcher(object):
 
 			clusters[predicted].append(data)
 
-		clusters = map(lambda x: np.array(x), clusters)
+		clusters = list(map(lambda x: np.array(x), clusters))
 		return self.__unsupervised_confusion_matrix(clusters)
 
 	@prepare_directory('results')
@@ -237,4 +240,48 @@ class Researcher(object):
 			resume.append(sample.tolist() + [predicted_label, output])
 
 		return file_id, labels, resume
+
+	def find_statistical_errors(self, algorithm, k, classifier):
+		sample_size = 50
+		all_agreed = np.zeros(sample_size)
+		machine_agreed = np.zeros(sample_size)
+		all_disagreed = np.zeros(sample_size)
+		supervised_and_doctor_agreed = np.zeros(sample_size)
+
+		for i in range(sample_size):
+			cases = [0, 0, 0, 0]
+			_, right, wrong = self.__confusion_labels_kernel(algorithm, k)
+
+			for sample, predicted_label in right:
+				output = classifier.predict([sample[:-1]])[0]
+
+				if int(output) == int(predicted_label):
+					cases[0] += 1
+
+			for sample, predicted_label in wrong:
+				output = classifier.predict([sample[:-1]])[0]
+
+				if int(output) == int(predicted_label):
+					cases[1] += 1
+
+				if int(output) != int(predicted_label) and int(output) != int(sample[-1]):
+					cases[2] += 1
+				
+				if int(output) != int(predicted_label) and int(output) == int(sample[-1]):
+					cases[3] += 1
+
+
+
+			all_agreed[i] = cases[0]
+			machine_agreed[i] = cases[1]
+			all_disagreed[i] = cases[2]
+			supervised_and_doctor_agreed[i] = cases[3]
+
+		with open('results.txt', 'w+') as f:
+			f.write(str(all_agreed.mean()) + ',' + str(all_agreed.std()) + '\n')
+			f.write(str(machine_agreed.mean()) + ',' + str(machine_agreed.std()) + '\n')
+			f.write(str(all_disagreed.mean()) + ',' + str(all_disagreed.std()) + '\n')
+			f.write(str(supervised_and_doctor_agreed.mean()) + ',' + str(supervised_and_doctor_agreed.std()) + '\n')
+
+
 
