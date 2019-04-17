@@ -30,15 +30,19 @@ for source_index, source in enumerate(sources):
 			a = float(len(right))
 			b = float(len(wrong))
 			accuracy[iteration, k - min_k] = a / (a + b)
-			print(accuracy[iteration, k - min_k])
 
-	plt.errorbar(k_range, accuracy.mean(axis=0), accuracy.std(axis=0))
+	mean = accuracy.mean(axis=0)
+	std = accuracy.std(axis=0)
+
+	print(mean, std)
+	plt.errorbar(k_range, mean, std)
 
 plt.xlabel('Number of clusters')
 plt.ylabel('Accuracy')
-plt.legend(labels)
+plt.legend(labels, bbox_to_anchor=(0,1.02,1,0.2), loc="lower left",
+                mode="expand", borderaxespad=0, ncol=2)
 
-plt.savefig('accuracy.png')
+plt.savefig('accuracy.png', bbox_inches='tight')
 plt.clf()
 plt.close()
 		

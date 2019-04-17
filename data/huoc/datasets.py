@@ -17,7 +17,7 @@ class StdScaledHuocDataset(HuocDataset):
 	scaler = StandardScaler
 
 class CognitiveTestsDataset(HuocDataset):
-	name = 'Only cognitive tests'
+	name = 'Cognitive tests'
 	features = [3, 4, 5, 6, -1]
 
 class ScaledCognitiveTestsDataset(CognitiveTestsDataset):
@@ -41,7 +41,7 @@ class StdScaledCognitivePlusGenderDataset(CognitivePlusGenderDataset):
 	scaler = StandardScaler
 
 class SocialInfoDataset(HuocDataset):
-	name = 'Only social information'
+	name = 'Social information'
 	features = [0, 1, 2, -1]
 
 class ScaledSocialInfoDataset(SocialInfoDataset):
@@ -65,7 +65,7 @@ class StdScaledSocialAndTestsDataset(SocialAndTestsDataset):
 	scaler = StandardScaler
 
 class GeneticMarkersDataset(HuocDataset):
-	name = 'Only genetic markers'
+	name = 'Genetic markers'
 	features = [7, 8, -1]
 
 class ScaledGeneticMarkersDataset(GeneticMarkersDataset):

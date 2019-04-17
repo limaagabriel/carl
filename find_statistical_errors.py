@@ -4,8 +4,8 @@ from clustering.traditional.FCMeans import FCMeans
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neural_network import MLPClassifier
 
-min_k = 3
-max_k = 15
+min_k = 13
+max_k = 13
 k_range = range(min_k, max_k + 1)
 sources = [CognitiveTestsDataset]
 algorithms = [FCMeans]
