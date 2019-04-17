@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 
 min_k = 3
 max_k = 20
-sample_size = 30
+sample_size = 20
 sample_range = range(sample_size)
 sources = [HuocDataset, CognitiveTestsDataset, SocialInfoDataset, SocialAndTestsDataset, GeneticMarkersDataset]
 k_range = range(min_k, max_k + 1)
